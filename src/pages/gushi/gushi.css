@@ -1,0 +1,18 @@
+@charset "utf-8";
+
+#wrapper{ padding:5% 10%; position:relative;}
+
+/* 要注意表单元素并不继承父级 font 的问题 */
+body, button, input, select, textarea {
+  font: 300 1em/1.8 PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif;
+}
+
+.subitem {
+    display: inline-block;
+    margin-left: 0.512rem;
+}
+
+.tab-content {
+    background-color: rgb(250, 251, 252);
+    padding: 0.13333rem 1.06667rem;
+}
