@@ -78,45 +78,84 @@ export default class Author extends Component {
     Taro.navigateBack()
   }
   render () {
-    // WxParse.wxParse('current_question_content', 'html', this.data.current_question.content, this, 5)
-      return this.state.loading
-          ? null
-          : <View className='at-article' id="author">
-            <View className='at-article__h2'>
-              <AtCard title={this.state.item.title}>
-                { 
-                  this.state.item.image ? <Image className='at-article__img' src={this.state.item.image} mode='aspectFit' /> : '' 
-                }
-                <View>{this.state.item.desc}</View>
-              </AtCard>
-            </View>
-            <View className='at-article__p'>
-              <AtList>
-                { 
-                  this.state.list.filter((_, i) => i >= (this.state.page.current-1) * this.state.page.pageSize && i < (this.state.page.current) * this.state.page.pageSize).map((item,index) => {
-                    return <AtListItem onClick={this.navigateTo.bind(this,'/pages/gushi/gushi?id='+item._id)} title={item.title} arrow='right' extraText={item.author}></AtListItem>
-                  })
-                }
-              </AtList>
-            </View>
-            <View className='at-article__p'>
-              {
-                this.state.list.length > 0 ?
-                <AtPagination onPageChange={this.onPageChange.bind(this)} icon total={this.state.page.total} pageSize={this.state.page.pageSize} current={this.state.page.current}></AtPagination> : ''}
-            </View>
-            <View className='at-article__content'>
-            {
+    const { item = {fanyi_id: []}, list = [] } = this.state
+    const {
+      fanyi_id,
+      title,
+      _id,
+      image,
+      desc
+    } = item
+      || {
+        fanyi_id: [],
+        title: '',
+        id: '0',
+        image: '',
+        desc: ''
+      }
 
-              this.state.fanyi_id.map((item,index) => {
-                return (
-                  <AtCard title={this.state.item['fanyi_title_'+item]}>
-                    <View className='at-article__p'  dangerouslySetInnerHTML={{__html: this.state.item['fanyi_'+item]}}></View>
-                  </AtCard>
-                )
-              })
-            }
-            </View>
-          </View>
+    const content = fanyi_id.map((item,index) => {
+        return (
+          <AtCard title={this.state.item['fanyi_title_'+item]} key={index}>
+            <View className='at-article__p'  dangerouslySetInnerHTML={{__html: this.state.item['fanyi_'+item]}} />
+          </AtCard>
+        )
+      })
+
+    const listCont = list.filter((_, i) => i >= (this.state.page.current-1) * this.state.page.pageSize && i < (this.state.page.current) * this.state.page.pageSize).map((item,index) => {
+      return <AtListItem onClick={this.navigateTo.bind(this,'/pages/gushi/gushi?id='+item._id)} title={item.title} arrow='right' extraText={item.author}></AtListItem>
+    })
+
+    return (this.state.loading ||
+      <View className='at-article' id="author">
+        <View className='at-article__h2'>
+          {title
+            && <AtCard title={title} key={_id}>
+                {image && <Image className='at-article__img' src={image} mode='aspectFit' />}
+                <View>{desc}</View>
+              </AtCard>
+          }
+        </View>
+        <View className='at-article__p'>
+          <AtList>
+            {listCont}
+          </AtList>
+        </View>
+        <View>{content}</View>
+      </View>
+    )
+
+    // WxParse.wxParse('current_question_content', 'html', this.data.current_question.content, this, 5)
+    // return (this.state.loading
+    //   ? null
+    //   : <View className='at-article' id="author">
+    //     <View className='at-article__h2'>
+    //       <AtCard title={this.state.item.title} key={this.state.item._id}>
+    //         { 
+    //           // this.state.item.image ? <Image className='at-article__img' src={this.state.item.image} mode='aspectFit' /> : '' 
+    //         }
+    //         <View>{this.state.item.desc}</View>
+    //       </AtCard>
+    //     </View>
+    //     <View className='at-article__p'>
+    //       <AtList>
+    //         { 
+    //           // this.state.list.filter((_, i) => i >= (this.state.page.current-1) * this.state.page.pageSize && i < (this.state.page.current) * this.state.page.pageSize).map((item,index) => {
+    //           //   return <AtListItem onClick={this.navigateTo.bind(this,'/pages/gushi/gushi?id='+item._id)} title={item.title} arrow='right' extraText={item.author}></AtListItem>
+    //           // })
+    //         }
+    //       </AtList>
+    //     </View>
+    //     <View className='at-article__p'>
+    //       {
+    //         this.state.list.length > 0 ?
+    //         <AtPagination onPageChange={this.onPageChange.bind(this)} icon total={this.state.page.total} pageSize={this.state.page.pageSize} current={this.state.page.current}></AtPagination> : ''}
+    //     </View>
+    //     <View className='at-article__content'>
+    //       {content}
+    //     </View>
+    //   </View>
+    // )
       
   }
 }
